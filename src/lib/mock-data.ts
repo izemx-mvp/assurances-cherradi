@@ -114,7 +114,7 @@ export const seedCampaigns: Campaign[] = [
       { id: "s2", delayDays: 3, message: "{{prenom}}, votre devis expire dans 4 jours. Un conseiller peut vous accompagner.", buttons: ["Parler à un conseiller", "Plus tard"] },
       { id: "s3", delayDays: 7, message: "Dernière relance : votre offre à 42€/mois est encore valable aujourd'hui.", buttons: ["Souscrire", "Ne plus me rappeler"] },
     ],
-    stats: { sent: 842, opened: 731, clicked: 214, converted: 58 },
+    ...campaignDefaults, targetProduct: "auto", stats: { sent: 842, opened: 731, clicked: 214, converted: 58 },
   },
   {
     id: "camp2",
@@ -128,7 +128,7 @@ export const seedCampaigns: Campaign[] = [
       { id: "s1", delayDays: 0, message: "📣 Offre spéciale Mutuelle Santé — jusqu'à −25% la 1re année pour les nouveaux adhérents.", buttons: ["Simuler ma cotisation", "Ne plus me rappeler"] },
       { id: "s2", delayDays: 5, message: "Il vous reste 48h pour profiter de −25% sur votre mutuelle.", buttons: ["Je simule", "Désinscription"] },
     ],
-    stats: { sent: 1250, opened: 980, clicked: 322, converted: 74 },
+    ...campaignDefaults, targetProduct: "auto", stats: { sent: 1250, opened: 980, clicked: 322, converted: 74 },
   },
   {
     id: "camp3",
@@ -143,7 +143,7 @@ export const seedCampaigns: Campaign[] = [
       { id: "s2", delayDays: 3, message: "{{prenom}}, votre devis Habitation est encore valable 7 jours.", buttons: ["Oui, m'appeler", "Plus tard", "Me désinscrire"] },
       { id: "s3", delayDays: 10, message: "Dernière chance pour votre offre Habitation.", buttons: ["Souscrire", "Non merci"] },
     ],
-    stats: { sent: 512, opened: 402, clicked: 118, converted: 31 },
+    ...campaignDefaults, targetProduct: "auto", stats: { sent: 512, opened: 402, clicked: 118, converted: 31 },
   },
   {
     id: "camp4",
@@ -156,7 +156,7 @@ export const seedCampaigns: Campaign[] = [
     steps: [
       { id: "s1", delayDays: 0, message: "{{prenom}}, économisez jusqu'à 15 000€ en changeant d'assurance emprunteur.", buttons: ["Estimer mes économies"] },
     ],
-    stats: { sent: 210, opened: 168, clicked: 47, converted: 12 },
+    ...campaignDefaults, targetProduct: "auto", stats: { sent: 210, opened: 168, clicked: 47, converted: 12 },
   },
   {
     id: "camp5",
@@ -169,7 +169,7 @@ export const seedCampaigns: Campaign[] = [
     steps: [
       { id: "s1", delayDays: 0, message: "Cher client, en tant qu'assuré Auto, bénéficiez de −20% sur votre assurance Moto 🏍️", buttons: ["En savoir plus"] },
     ],
-    stats: { sent: 0, opened: 0, clicked: 0, converted: 0 },
+    ...campaignDefaults, targetProduct: "auto", stats: { sent: 0, opened: 0, clicked: 0, converted: 0 },
   },
 ];
 
