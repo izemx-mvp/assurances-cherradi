@@ -31,6 +31,17 @@ export interface CampaignStep {
   buttons: string[];
 }
 
+export type CampaignTargetMode = "all" | "product" | "manual";
+
+export interface DailyWindow {
+  enabled: boolean;
+  start: string; // "HH:MM"
+  end: string;   // "HH:MM"
+}
+
+// 0=Lundi ... 6=Dimanche
+export type WeeklySchedule = Record<number, DailyWindow>;
+
 export interface Campaign {
   id: string;
   nom: string;
@@ -41,6 +52,14 @@ export interface Campaign {
   stopOnReply: boolean;
   steps: CampaignStep[];
   stats: { sent: number; opened: number; clicked: number; converted: number };
+  // Timing
+  initialDelayHours: number;   // délai avant le 1er message
+  betweenDelayHours: number;   // délai par défaut entre chaque relance
+  schedule: WeeklySchedule;    // jours + créneaux autorisés
+  // Ciblage
+  targetMode: CampaignTargetMode;
+  targetProduct?: string;
+  prospectIds?: string[];
 }
 
 export type Sender = "ia" | "prospect" | "humain" | "system";
@@ -63,6 +82,7 @@ export interface Conversation {
   status: ProspectStatus;
   messages: Message[];
   lastAt: string;
+  assignedUserId?: string;
 }
 
 export interface Commercial {
@@ -93,3 +113,23 @@ export type Resource =
   | "commerciaux"
   | "users";
 export type Action = "create" | "read" | "update" | "delete";
+
+export const defaultSchedule: WeeklySchedule = {
+  0: { enabled: true, start: "09:00", end: "19:00" },
+  1: { enabled: true, start: "09:00", end: "19:00" },
+  2: { enabled: true, start: "09:00", end: "19:00" },
+  3: { enabled: true, start: "09:00", end: "19:00" },
+  4: { enabled: true, start: "09:00", end: "18:00" },
+  5: { enabled: false, start: "10:00", end: "13:00" },
+  6: { enabled: false, start: "10:00", end: "13:00" },
+};
+
+export const dayLabels: Record<number, string> = {
+  0: "Lundi",
+  1: "Mardi",
+  2: "Mercredi",
+  3: "Jeudi",
+  4: "Vendredi",
+  5: "Samedi",
+  6: "Dimanche",
+};

@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { Plus, Search, MoreHorizontal, Eye, Pencil, Trash2, UserCog } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
+import { Plus, Search, MoreHorizontal, Eye, Pencil, Trash2, UserCog, Upload } from "lucide-react";
 import { toast } from "sonner";
+
 import { PageHeader } from "@/components/common/PageHeader";
 import { StatusBadge, statusLabels } from "@/components/common/StatusBadge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -101,6 +102,54 @@ function ProspectsPage() {
   const [detailsId, setDetailsId] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [assignId, setAssignId] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleCsvUpload = async (file: File) => {
+    try {
+      const text = await file.text();
+      const lines = text.split(/\r?\n/).filter((l) => l.trim());
+      if (lines.length < 2) {
+        toast.error("Fichier CSV vide");
+        return;
+      }
+      const headers = lines[0].split(/[,;]/).map((h) => h.trim().toLowerCase());
+      const idx = (name: string) => headers.findIndex((h) => h === name || h.startsWith(name));
+      const iPrenom = idx("prenom");
+      const iNom = idx("nom");
+      const iPhone = idx("phone") >= 0 ? idx("phone") : idx("telephone");
+      const iEmail = idx("email");
+      const iProduit = idx("produit");
+      if (iPrenom < 0 || iNom < 0 || iPhone < 0) {
+        toast.error("Colonnes requises : prenom, nom, phone");
+        return;
+      }
+      let count = 0;
+      for (let li = 1; li < lines.length; li++) {
+        const cols = lines[li].split(/[,;]/).map((c) => c.trim());
+        if (!cols[iPrenom] || !cols[iNom] || !cols[iPhone]) continue;
+        create({
+          prenom: cols[iPrenom],
+          nom: cols[iNom],
+          phone: cols[iPhone],
+          email: iEmail >= 0 ? cols[iEmail] : "",
+          source: "import",
+          produit: (iProduit >= 0 && (products as readonly string[]).includes(cols[iProduit])
+            ? cols[iProduit]
+            : "Auto") as Prospect["produit"],
+          statut: "nouveau",
+          score: 50,
+          commercialId: undefined,
+          notes: "Import CSV",
+        });
+        count++;
+      }
+      toast.success(`${count} prospect(s) importé(s)`);
+    } catch {
+      toast.error("Erreur de lecture du fichier");
+    }
+    if (fileRef.current) fileRef.current.value = "";
+  };
+
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -166,13 +215,29 @@ function ProspectsPage() {
         description="Gérez vos prospects, leur statut de qualification et leur commercial assigné"
         actions={
           canCreate && (
-            <Button onClick={openCreate} className="gradient-primary shadow-glow">
-              <Plus className="mr-2 h-4 w-4" />
-              Nouveau prospect
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <input
+                ref={fileRef}
+                type="file"
+                accept=".csv,text/csv"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) handleCsvUpload(f);
+                }}
+              />
+              <Button variant="outline" onClick={() => fileRef.current?.click()}>
+                <Upload className="mr-2 h-4 w-4" /> Importer CSV
+              </Button>
+              <Button onClick={openCreate} className="gradient-primary shadow-glow">
+                <Plus className="mr-2 h-4 w-4" />
+                Nouveau prospect
+              </Button>
+            </div>
           )
         }
       />
+
 
       <Card className="shadow-card">
         <CardContent className="p-4">
