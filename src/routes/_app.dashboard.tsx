@@ -188,7 +188,9 @@ function DashboardPage() {
                 <StatusBadge status={p.statut} />
               </div>
             ))}
-            {conversations.slice(0, 0)}
+            <div className="text-xs text-muted-foreground">
+              {conversations.length} conversations WhatsApp actives
+            </div>
           </CardContent>
         </Card>
       </div>
