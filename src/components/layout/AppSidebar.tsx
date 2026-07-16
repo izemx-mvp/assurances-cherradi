@@ -51,18 +51,8 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b border-sidebar-border">
-        <div className="flex items-center gap-3 px-2 py-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl shadow-glow ring-1 ring-white/10">
-            <Logo size={34} />
-          </div>
-          {!collapsed && (
-            <div className="min-w-0">
-              <div className="truncate font-display text-lg leading-none">Nexa</div>
-              <div className="mt-1 truncate text-[10px] uppercase tracking-[0.18em] text-sidebar-primary">
-                Assurances · IA
-              </div>
-            </div>
-          )}
+        <div className="flex items-center justify-center px-2 py-3">
+          <Logo size={collapsed ? 36 : 56} />
         </div>
       </SidebarHeader>
 
