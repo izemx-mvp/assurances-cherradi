@@ -72,6 +72,7 @@ type FormState = Omit<AppUser, "id" | "lastLogin"> & {
 const emptyForm = (): FormState => ({
   nom: "",
   email: "",
+  phone: "",
   role: "commercial",
   actif: true,
   permissions: rolePermissions("commercial"),
@@ -107,6 +108,7 @@ function UsersPage() {
     setForm({
       nom: u.nom,
       email: u.email,
+      phone: u.phone ?? "",
       role: u.role,
       actif: u.actif,
       permissions: u.permissions ?? rolePermissions(u.role),
@@ -273,6 +275,15 @@ function UsersPage() {
                 <Input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
               </div>
               <div>
+                <Label>Téléphone</Label>
+                <Input
+                  type="tel"
+                  placeholder="+33 6 12 34 56 78"
+                  value={form.phone ?? ""}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                />
+              </div>
+              <div>
                 <Label>Rôle (préréglage)</Label>
                 <Select value={form.role} onValueChange={(v) => applyRolePreset(v as UserRole)}>
                   <SelectTrigger>
@@ -287,7 +298,7 @@ function UsersPage() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="flex items-end justify-between rounded-lg border p-3">
+              <div className="flex items-end justify-between rounded-lg border p-3 sm:col-span-2">
                 <Label className="mb-0">Compte actif</Label>
                 <Switch checked={form.actif} onCheckedChange={(v) => setForm({ ...form, actif: v })} />
               </div>
