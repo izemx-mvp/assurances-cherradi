@@ -87,7 +87,8 @@ function ConversationsPage() {
     }, 400);
   };
 
-  const composerDisabled = active ? active.noReply && active.handledBy === "ia" : true;
+  const isClosed = active ? active.status === "perdu" || active.status === "converti" : false;
+  const composerDisabled = active ? isClosed || (active.noReply && active.handledBy === "ia") : true;
 
   return (
     <div>
@@ -215,7 +216,12 @@ function ConversationsPage() {
                   </div>
                 </div>
 
-                {active.noReply && (
+                {isClosed && (
+                  <div className="border-b bg-muted px-4 py-2 text-xs text-muted-foreground">
+                    Ticket clôturé ({active.status === "converti" ? "Converti" : "Perdu"}) — lecture seule, historique uniquement.
+                  </div>
+                )}
+                {!isClosed && active.noReply && (
                   <div className="border-b bg-info/10 px-4 py-2 text-xs text-info-foreground">
                     Mode No-Reply — le prospect ne peut pas envoyer de texte libre, uniquement les boutons.
                   </div>
@@ -283,9 +289,11 @@ function ConversationsPage() {
                     <Textarea
                       rows={1}
                       placeholder={
-                        composerDisabled
-                          ? "Composer désactivé — campagne No-Reply gérée par l'IA"
-                          : "Écrire un message…"
+                        isClosed
+                          ? "Ticket clôturé — envoi de messages désactivé"
+                          : composerDisabled
+                            ? "Composer désactivé — campagne No-Reply gérée par l'IA"
+                            : "Écrire un message…"
                       }
                       value={composerText}
                       onChange={(e) => setComposerText(e.target.value)}
