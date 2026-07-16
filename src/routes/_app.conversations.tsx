@@ -22,7 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useCommerciaux, useConversations, useProspects } from "@/stores";
+import { useCommerciaux, useConversations, useProspects, useUsers } from "@/stores";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_app/conversations")({
@@ -39,10 +39,12 @@ function ConversationsPage() {
   const prospects = useProspects((s) => s.items);
   const updateProspect = useProspects((s) => s.update);
   const commerciaux = useCommerciaux((s) => s.items);
+  const users = useUsers((s) => s.items);
 
   const [activeId, setActiveId] = useState<string>(items[0]?.id ?? "");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string>("all");
+  const [assigneeFilter, setAssigneeFilter] = useState<string>("all");
   const [composerText, setComposerText] = useState("");
   const [assignOpen, setAssignOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -58,9 +60,13 @@ function ConversationsPage() {
         (filter === "ia" && c.handledBy === "ia") ||
         (filter === "humain" && c.handledBy === "humain") ||
         (filter === "nouveau" && c.status === "nouveau");
-      return matchQ && matchF;
+      const matchA =
+        assigneeFilter === "all" ||
+        (assigneeFilter === "unassigned" && !c.assignedUserId) ||
+        c.assignedUserId === assigneeFilter;
+      return matchQ && matchF && matchA;
     });
-  }, [items, prospects, search, filter]);
+  }, [items, prospects, search, filter, assigneeFilter]);
 
   const active = items.find((c) => c.id === activeId);
   const activeProspect = active ? prospects.find((p) => p.id === active.prospectId) : null;
