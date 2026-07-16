@@ -18,11 +18,14 @@ import { toast } from "sonner";
 export function AppHeader() {
   const { currentName, currentRole } = useAuth();
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur-md">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border/60 bg-background/70 px-4 backdrop-blur-xl">
       <SidebarTrigger />
       <div className="relative hidden max-w-md flex-1 md:block">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input placeholder="Rechercher un prospect, une campagne…" className="pl-9" />
+        <Input
+          placeholder="Rechercher un prospect, une campagne…"
+          className="border-transparent bg-muted/60 pl-9 focus-visible:border-ring focus-visible:bg-card"
+        />
       </div>
       <div className="ml-auto flex items-center gap-1">
         <ThemeToggle />

@@ -78,18 +78,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "LeadFlow Assurances — Backoffice IA WhatsApp" },
+      { title: "Nexa Assurances — Pilote IA WhatsApp" },
       {
         name: "description",
         content:
-          "Backoffice de qualification et relance automatique sur WhatsApp pour agences d'assurances. Pilotez prospects, campagnes IA et commerciaux depuis un seul écran.",
+          "Nexa Assurances — le pilote IA qui qualifie, relance et convertit vos prospects sur WhatsApp. Prospects, campagnes et commerciaux dans un seul cockpit.",
       },
-      { name: "author", content: "Karim Assurances" },
-      { property: "og:title", content: "LeadFlow Assurances — Backoffice IA WhatsApp" },
+      { name: "author", content: "Nexa Assurances" },
+      { property: "og:title", content: "Nexa Assurances — Pilote IA WhatsApp" },
       {
         property: "og:description",
         content:
-          "Qualification et relance automatique sur WhatsApp pour agences d'assurances.",
+          "Le cockpit IA WhatsApp pour agences d'assurances. Qualification, relance et conversion automatisées.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -97,6 +97,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,

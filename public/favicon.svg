@@ -1,11 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#2f5fe0"/>
-      <stop offset="1" stop-color="#7c3aed"/>
+    <linearGradient id="g" x1="8" y1="6" x2="56" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0e5e6f"/>
+      <stop offset="0.55" stop-color="#0b7a8a"/>
+      <stop offset="1" stop-color="#d4a24c"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.75"/>
     </linearGradient>
   </defs>
-  <path d="M32 4 L56 12 V30 C56 46 44 56 32 60 C20 56 8 46 8 30 V12 Z" fill="url(#g)"/>
-  <path d="M22 24 H42 A4 4 0 0 1 46 28 V36 A4 4 0 0 1 42 40 H30 L24 46 V40 H22 A4 4 0 0 1 18 36 V28 A4 4 0 0 1 22 24 Z" fill="#ffffff"/>
-  <path d="M32 28 L34 32 L38 33 L35 36 L36 40 L32 38 L28 40 L29 36 L26 33 L30 32 Z" fill="#25d366"/>
+  <path d="M32 3 L58 12 V32 C58 48 46 58 32 61 C18 58 6 48 6 32 V12 Z" fill="url(#g)"/>
+  <path d="M32 8 L53 15 V32 C53 45 43 53 32 56 C21 53 11 45 11 32 V15 Z" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1"/>
+  <path d="M22 42 V22 L32 34 L42 22 V42" stroke="url(#g2)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="46" cy="20" r="3.2" fill="#d4a24c"/>
 </svg>
