@@ -1,4 +1,5 @@
-import { Bell, Search } from "lucide-react";
+import { Bell, LogOut, Search, User as UserIcon } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,14 @@ import { roleLabels } from "@/lib/permissions";
 import { toast } from "sonner";
 
 export function AppHeader() {
-  const { currentName, currentRole } = useAuth();
+  const { currentName, currentRole, logout } = useAuth();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    logout();
+    toast.success("Vous avez été déconnecté");
+    navigate({ to: "/login" });
+  };
+
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border/60 bg-background/70 px-4 backdrop-blur-xl">
       <SidebarTrigger />
@@ -72,11 +80,19 @@ export function AppHeader() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Mon compte</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => toast.success("Profil ouvert")}>Profil</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => toast("Session simulée fermée")}>
-              Se déconnecter
+            <DropdownMenuItem onClick={() => toast.success("Profil ouvert")}>
+              <UserIcon className="mr-2 h-4 w-4" /> Profil
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
+              <LogOut className="mr-2 h-4 w-4" /> Se déconnecter
             </DropdownMenuItem>
           </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </header>
+  );
+}
+
         </DropdownMenu>
       </div>
     </header>
