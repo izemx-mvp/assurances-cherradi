@@ -5,6 +5,15 @@ import type {
   Conversation,
   Prospect,
 } from "./types";
+import { defaultSchedule } from "./types";
+
+const campaignDefaults = {
+  initialDelayHours: 0,
+  betweenDelayHours: 72,
+  schedule: defaultSchedule,
+  targetMode: "product" as const,
+};
+
 
 export const seedCommerciaux: Commercial[] = [
   {
