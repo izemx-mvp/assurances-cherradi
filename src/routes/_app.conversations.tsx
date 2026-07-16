@@ -87,7 +87,8 @@ function ConversationsPage() {
     }, 400);
   };
 
-  const composerDisabled = active ? active.noReply && active.handledBy === "ia" : true;
+  const isClosed = active ? active.status === "perdu" || active.status === "converti" : false;
+  const composerDisabled = active ? isClosed || (active.noReply && active.handledBy === "ia") : true;
 
   return (
     <div>

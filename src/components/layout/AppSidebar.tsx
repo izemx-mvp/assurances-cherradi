@@ -51,8 +51,8 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b border-sidebar-border">
-        <div className="flex items-center justify-center px-2 py-3">
-          <Logo size={collapsed ? 36 : 56} />
+        <div className="flex items-center justify-center px-2 py-4">
+          <Logo size={collapsed ? 40 : 96} />
         </div>
       </SidebarHeader>
 

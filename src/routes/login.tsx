@@ -34,7 +34,7 @@ function LoginPage() {
 
       <div className="w-full max-w-lg rounded-3xl border border-border/60 bg-card/80 p-10 shadow-elegant backdrop-blur-xl sm:p-12">
         <div className="mb-8 flex flex-col items-center text-center">
-          <Logo size={96} />
+          <Logo size={160} />
           <p className="mt-5 text-sm text-muted-foreground">Connectez-vous à votre espace</p>
         </div>
 
