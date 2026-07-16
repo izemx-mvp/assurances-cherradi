@@ -15,7 +15,6 @@ import { Route as AppUsersRouteImport } from './routes/_app.users'
 import { Route as AppProspectsRouteImport } from './routes/_app.prospects'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppConversationsRouteImport } from './routes/_app.conversations'
-import { Route as AppCommerciauxRouteImport } from './routes/_app.commerciaux'
 import { Route as AppCampaignsRouteImport } from './routes/_app.campaigns'
 
 const AppRoute = AppRouteImport.update({
@@ -47,11 +46,6 @@ const AppConversationsRoute = AppConversationsRouteImport.update({
   path: '/conversations',
   getParentRoute: () => AppRoute,
 } as any)
-const AppCommerciauxRoute = AppCommerciauxRouteImport.update({
-  id: '/commerciaux',
-  path: '/commerciaux',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppCampaignsRoute = AppCampaignsRouteImport.update({
   id: '/campaigns',
   path: '/campaigns',
@@ -61,7 +55,6 @@ const AppCampaignsRoute = AppCampaignsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/campaigns': typeof AppCampaignsRoute
-  '/commerciaux': typeof AppCommerciauxRoute
   '/conversations': typeof AppConversationsRoute
   '/dashboard': typeof AppDashboardRoute
   '/prospects': typeof AppProspectsRoute
@@ -70,7 +63,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/campaigns': typeof AppCampaignsRoute
-  '/commerciaux': typeof AppCommerciauxRoute
   '/conversations': typeof AppConversationsRoute
   '/dashboard': typeof AppDashboardRoute
   '/prospects': typeof AppProspectsRoute
@@ -81,7 +73,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/_app/campaigns': typeof AppCampaignsRoute
-  '/_app/commerciaux': typeof AppCommerciauxRoute
   '/_app/conversations': typeof AppConversationsRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/prospects': typeof AppProspectsRoute
@@ -92,7 +83,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/campaigns'
-    | '/commerciaux'
     | '/conversations'
     | '/dashboard'
     | '/prospects'
@@ -101,7 +91,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/campaigns'
-    | '/commerciaux'
     | '/conversations'
     | '/dashboard'
     | '/prospects'
@@ -111,7 +100,6 @@ export interface FileRouteTypes {
     | '/'
     | '/_app'
     | '/_app/campaigns'
-    | '/_app/commerciaux'
     | '/_app/conversations'
     | '/_app/dashboard'
     | '/_app/prospects'
@@ -167,13 +155,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppConversationsRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/commerciaux': {
-      id: '/_app/commerciaux'
-      path: '/commerciaux'
-      fullPath: '/commerciaux'
-      preLoaderRoute: typeof AppCommerciauxRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/campaigns': {
       id: '/_app/campaigns'
       path: '/campaigns'
@@ -186,7 +167,6 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppCampaignsRoute: typeof AppCampaignsRoute
-  AppCommerciauxRoute: typeof AppCommerciauxRoute
   AppConversationsRoute: typeof AppConversationsRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppProspectsRoute: typeof AppProspectsRoute
@@ -195,7 +175,6 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppCampaignsRoute: AppCampaignsRoute,
-  AppCommerciauxRoute: AppCommerciauxRoute,
   AppConversationsRoute: AppConversationsRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppProspectsRoute: AppProspectsRoute,
