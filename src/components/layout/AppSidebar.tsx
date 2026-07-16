@@ -43,9 +43,10 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (r) => r.location.pathname });
-  const { currentRole, currentName } = useAuth();
+  const { currentRole, currentName, overrides } = useAuth();
 
-  const visible = items.filter((it) => !it.resource || can(currentRole, it.resource, "read"));
+  const visible = items.filter((it) => !it.resource || can(currentRole, it.resource, "read", overrides));
+
 
   return (
     <Sidebar collapsible="icon">

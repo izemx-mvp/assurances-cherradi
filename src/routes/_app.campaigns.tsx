@@ -80,9 +80,11 @@ function CampaignsPage() {
   const { items, create, update, duplicate, remove } = useCampaigns();
   const prospects = useProspects((s) => s.items);
   const role = useAuth((s) => s.currentRole);
-  const canCreate = can(role, "campaigns", "create");
-  const canUpdate = can(role, "campaigns", "update");
-  const canDelete = can(role, "campaigns", "delete");
+  const overrides = useAuth((s) => s.overrides);
+  const canCreate = can(role, "campaigns", "create", overrides);
+  const canUpdate = can(role, "campaigns", "update", overrides);
+  const canDelete = can(role, "campaigns", "delete", overrides);
+
 
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Campaign | null>(null);

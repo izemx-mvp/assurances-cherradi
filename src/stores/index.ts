@@ -124,10 +124,25 @@ export const useUsers = create<UsersState>((set) => ({
 interface AuthState {
   currentRole: UserRole;
   currentName: string;
+  currentUserId?: string;
+  overrides?: import("@/lib/permissions").PermissionOverrides;
   setRole: (r: UserRole) => void;
+  loginAs: (u: AppUser) => void;
+  logout: () => void;
 }
 export const useAuth = create<AuthState>((set) => ({
   currentRole: "admin",
   currentName: "Karim Haddad",
-  setRole: (r) => set({ currentRole: r }),
+  currentUserId: undefined,
+  overrides: undefined,
+  setRole: (r) => set({ currentRole: r, overrides: undefined }),
+  loginAs: (u) =>
+    set({
+      currentRole: u.role,
+      currentName: u.nom,
+      currentUserId: u.id,
+      overrides: u.permissions,
+    }),
+  logout: () => set({ currentUserId: undefined }),
 }));
+

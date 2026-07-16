@@ -104,7 +104,9 @@ export interface AppUser {
   role: UserRole;
   actif: boolean;
   lastLogin: string;
+  permissions?: Partial<Record<Resource, Action[]>>;
 }
+
 
 export type Resource =
   | "prospects"
