@@ -163,7 +163,7 @@ function ConversationsPage() {
                       </div>
                       <span className="text-[10px] text-muted-foreground">{formatTime(c.lastAt)}</span>
                     </div>
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex flex-wrap items-center gap-1.5">
                       <StatusBadge status={c.status} />
                       {c.handledBy === "humain" && (
                         <Badge variant="outline" className="border-accent/30 bg-accent/15">
@@ -173,6 +173,11 @@ function ConversationsPage() {
                       {c.noReply && (
                         <Badge variant="outline" className="border-info/30 bg-info/15">
                           No-Reply
+                        </Badge>
+                      )}
+                      {c.assignedUserId && (
+                        <Badge variant="outline" className="border-primary/30 bg-primary/10 text-primary">
+                          {users.find((u) => u.id === c.assignedUserId)?.nom ?? "Assigné"}
                         </Badge>
                       )}
                     </div>
