@@ -185,6 +185,7 @@ function UsersPage() {
               <TableRow>
                 <TableHead>Nom</TableHead>
                 <TableHead>Email</TableHead>
+                <TableHead>Téléphone</TableHead>
                 <TableHead>Rôle</TableHead>
                 <TableHead>Permissions</TableHead>
                 <TableHead>Statut</TableHead>
@@ -201,6 +202,7 @@ function UsersPage() {
                   <TableRow key={u.id} className="hover:bg-muted/50">
                     <TableCell className="font-medium">{u.nom}</TableCell>
                     <TableCell className="text-sm text-muted-foreground">{u.email}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">{u.phone ?? "—"}</TableCell>
                     <TableCell>
                       <Badge variant="outline" className={roleStyles[u.role]}>
                         {roleLabels[u.role]}
