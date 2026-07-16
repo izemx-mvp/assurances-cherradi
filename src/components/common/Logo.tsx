@@ -5,7 +5,7 @@ export function Logo({ size = 32, className = "" }: { size?: number; className?:
   return (
     <img
       src={LOGO_URL}
-      alt="Nexa Assurances"
+      alt="Assurances Cherradi"
       className={`rounded-lg object-contain ${className}`}
       style={{ width: size, height: size }}
     />

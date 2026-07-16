@@ -78,14 +78,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Nexa Assurances — Pilote IA WhatsApp" },
+      { title: "Assurances Cherradi — Pilote IA WhatsApp" },
       {
         name: "description",
         content:
-          "Nexa Assurances — le pilote IA qui qualifie, relance et convertit vos prospects sur WhatsApp. Prospects, campagnes et commerciaux dans un seul cockpit.",
+          "Assurances Cherradi — le pilote IA qui qualifie, relance et convertit vos prospects sur WhatsApp. Prospects, campagnes et commerciaux dans un seul cockpit.",
       },
-      { name: "author", content: "Nexa Assurances" },
-      { property: "og:title", content: "Nexa Assurances — Pilote IA WhatsApp" },
+      { name: "author", content: "Assurances Cherradi" },
+      { property: "og:title", content: "Assurances Cherradi — Pilote IA WhatsApp" },
       {
         property: "og:description",
         content:
