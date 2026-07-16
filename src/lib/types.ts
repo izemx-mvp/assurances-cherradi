@@ -101,6 +101,7 @@ export interface AppUser {
   id: string;
   nom: string;
   email: string;
+  phone?: string;
   role: UserRole;
   actif: boolean;
   lastLogin: string;

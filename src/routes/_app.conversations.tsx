@@ -22,7 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useCommerciaux, useConversations, useProspects } from "@/stores";
+import { useCommerciaux, useConversations, useProspects, useUsers } from "@/stores";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_app/conversations")({
@@ -39,10 +39,12 @@ function ConversationsPage() {
   const prospects = useProspects((s) => s.items);
   const updateProspect = useProspects((s) => s.update);
   const commerciaux = useCommerciaux((s) => s.items);
+  const users = useUsers((s) => s.items);
 
   const [activeId, setActiveId] = useState<string>(items[0]?.id ?? "");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string>("all");
+  const [assigneeFilter, setAssigneeFilter] = useState<string>("all");
   const [composerText, setComposerText] = useState("");
   const [assignOpen, setAssignOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -58,9 +60,13 @@ function ConversationsPage() {
         (filter === "ia" && c.handledBy === "ia") ||
         (filter === "humain" && c.handledBy === "humain") ||
         (filter === "nouveau" && c.status === "nouveau");
-      return matchQ && matchF;
+      const matchA =
+        assigneeFilter === "all" ||
+        (assigneeFilter === "unassigned" && !c.assignedUserId) ||
+        c.assignedUserId === assigneeFilter;
+      return matchQ && matchF && matchA;
     });
-  }, [items, prospects, search, filter]);
+  }, [items, prospects, search, filter, assigneeFilter]);
 
   const active = items.find((c) => c.id === activeId);
   const activeProspect = active ? prospects.find((p) => p.id === active.prospectId) : null;
@@ -122,6 +128,20 @@ function ConversationsPage() {
                   <SelectItem value="humain">Reprises humaines</SelectItem>
                 </SelectContent>
               </Select>
+              <Select value={assigneeFilter} onValueChange={setAssigneeFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Assigné à" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tous les assignés</SelectItem>
+                  <SelectItem value="unassigned">Non assignées</SelectItem>
+                  {users.map((u) => (
+                    <SelectItem key={u.id} value={u.id}>
+                      {u.nom}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="flex-1 overflow-y-auto">
               {filteredThreads.map((c) => {
@@ -143,7 +163,7 @@ function ConversationsPage() {
                       </div>
                       <span className="text-[10px] text-muted-foreground">{formatTime(c.lastAt)}</span>
                     </div>
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex flex-wrap items-center gap-1.5">
                       <StatusBadge status={c.status} />
                       {c.handledBy === "humain" && (
                         <Badge variant="outline" className="border-accent/30 bg-accent/15">
@@ -153,6 +173,11 @@ function ConversationsPage() {
                       {c.noReply && (
                         <Badge variant="outline" className="border-info/30 bg-info/15">
                           No-Reply
+                        </Badge>
+                      )}
+                      {c.assignedUserId && (
+                        <Badge variant="outline" className="border-primary/30 bg-primary/10 text-primary">
+                          {users.find((u) => u.id === c.assignedUserId)?.nom ?? "Assigné"}
                         </Badge>
                       )}
                     </div>
@@ -324,38 +349,37 @@ function ConversationsPage() {
       <Dialog open={assignOpen} onOpenChange={setAssignOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Transférer à un commercial</DialogTitle>
+            <DialogTitle>Assigner la conversation</DialogTitle>
           </DialogHeader>
           <div className="space-y-2">
-            {commerciaux
-              .filter((c) => c.actif)
-              .map((c) => (
+            {users
+              .filter((u) => u.actif)
+              .map((u) => (
                 <button
-                  key={c.id}
+                  key={u.id}
                   className="flex w-full items-center justify-between rounded-lg border p-3 text-left hover:bg-muted"
                   onClick={() => {
                     if (!active) return;
-                    update(active.id, { handledBy: "humain" });
+                    update(active.id, { handledBy: "humain", assignedUserId: u.id });
                     addMessage(active.id, {
                       sender: "system",
-                      text: `— Reprise par ${c.nom} (Commercial) —`,
+                      text: `— Reprise par ${u.nom} —`,
                     });
-                    if (activeProspect) {
-                      updateProspect(activeProspect.id, { commercialId: c.id });
-                    }
                     setAssignOpen(false);
-                    toast.success(`Transféré à ${c.nom}`);
+                    toast.success(`Assigné à ${u.nom}`);
                   }}
                 >
                   <div>
-                    <div className="font-medium">{c.nom}</div>
-                    <div className="text-xs text-muted-foreground">Taux : {c.closingRate}%</div>
+                    <div className="font-medium">{u.nom}</div>
+                    <div className="text-xs text-muted-foreground">{u.email}</div>
                   </div>
                 </button>
               ))}
           </div>
         </DialogContent>
       </Dialog>
+      {/* commerciaux kept for compatibility */}
+      {false && <span>{commerciaux.length}</span>}
     </div>
   );
 }
