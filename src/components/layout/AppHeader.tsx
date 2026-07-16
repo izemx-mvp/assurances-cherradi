@@ -92,9 +92,3 @@ export function AppHeader() {
     </header>
   );
 }
-
-        </DropdownMenu>
-      </div>
-    </header>
-  );
-}
