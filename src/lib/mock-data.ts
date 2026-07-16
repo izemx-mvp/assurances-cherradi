@@ -380,3 +380,112 @@ export const seedConversations: Conversation[] = [
     ],
   },
 ];
+
+// Ensure every non-"nouveau" prospect has a conversation with at least one Q/R pair
+const hasQRPair = (c: Conversation) => {
+  for (let i = 0; i < c.messages.length; i++) {
+    const m = c.messages[i];
+    if ((m.sender === "ia" || m.sender === "humain") && m.text.includes("?")) {
+      if (c.messages.slice(i + 1).some((x) => x.sender === "prospect")) return true;
+    }
+  }
+  return false;
+};
+
+const productQuestions: Record<string, string[]> = {
+  Auto: [
+    "Quel est le modèle et l'année de votre véhicule ?",
+    "Usage principal : quotidien, professionnel ou occasionnel ?",
+    "Quel est votre bonus/malus actuel ?",
+  ],
+  Habitation: [
+    "Quelle est la superficie de votre logement en m² ?",
+    "Êtes-vous propriétaire ou locataire ?",
+    "Dans quelle ville se situe votre logement ?",
+  ],
+  Santé: [
+    "Quelle est votre situation familiale ?",
+    "Portez-vous des lunettes ou avez-vous des soins dentaires réguliers ?",
+    "Quel niveau de couverture recherchez-vous ?",
+  ],
+  Vie: [
+    "Quel est votre âge ?",
+    "Quel capital souhaitez-vous garantir à vos proches ?",
+    "Avez-vous des personnes à charge ?",
+  ],
+  Pro: [
+    "Quel est votre secteur d'activité ?",
+    "Combien de salariés compte votre entreprise ?",
+    "Quel est votre chiffre d'affaires annuel ?",
+  ],
+  Moto: [
+    "Quel est le modèle et la cylindrée de votre moto ?",
+    "Usage principal : quotidien ou loisir ?",
+    "Où stationnez-vous habituellement votre moto ?",
+  ],
+  Voyage: [
+    "Quelle est votre destination ?",
+    "Quelle est la durée de votre séjour ?",
+    "Voyagez-vous seul ou en famille ?",
+  ],
+  Emprunteur: [
+    "Quel est le montant restant de votre prêt ?",
+    "Quelle est la durée restante en années ?",
+    "Quel est le taux de votre assurance actuelle ?",
+  ],
+};
+
+const productAnswers: Record<string, string[]> = {
+  Auto: ["Peugeot 308, 2022", "Quotidien", "0.72"],
+  Habitation: ["85 m²", "Locataire", "Marseille"],
+  Santé: ["Marié, 2 enfants", "Oui, lunettes", "Couverture confort"],
+  Vie: ["42 ans", "150 000 €", "Oui, 2 enfants"],
+  Pro: ["Commerce de détail", "5 salariés", "Environ 450 000 €"],
+  Moto: ["Yamaha MT-07, 689cc", "Loisir", "Garage fermé"],
+  Voyage: ["Thaïlande", "3 semaines", "En famille"],
+  Emprunteur: ["180 000 €", "18 ans", "0.36 %"],
+};
+
+const buildFallbackConv = (p: Prospect, existingId?: string): Conversation => {
+  const qs = productQuestions[p.produit] ?? productQuestions.Auto;
+  const as = productAnswers[p.produit] ?? productAnswers.Auto;
+  const closing =
+    p.statut === "perdu"
+      ? "Ne plus me rappeler"
+      : p.statut === "converti"
+        ? "C'est signé ✅"
+        : p.statut === "qualifie"
+          ? "Oui, rappelez-moi"
+          : "Plus tard peut-être";
+  return {
+    id: existingId ?? `conv-auto-${p.id}`,
+    prospectId: p.id,
+    campaignId: seedCampaigns[0].id,
+    handledBy: p.statut === "converti" || p.statut === "qualifie" ? "humain" : "ia",
+    noReply: false,
+    status: p.statut,
+    lastAt: t(11, 0),
+    messages: [
+      { id: "gm1", sender: "ia", text: `Bonjour ${p.prenom}, votre devis ${p.produit} est prêt. Puis-je vous poser quelques questions rapides ?`, time: t(9, 0), read: true },
+      { id: "gm2", sender: "prospect", text: "Oui bien sûr", time: t(9, 5), read: true },
+      { id: "gm3", sender: "ia", text: qs[0], time: t(9, 6), read: true },
+      { id: "gm4", sender: "prospect", text: as[0], time: t(9, 10), read: true },
+      { id: "gm5", sender: "ia", text: qs[1], time: t(9, 11), read: true },
+      { id: "gm6", sender: "prospect", text: as[1], time: t(9, 15), read: true },
+      { id: "gm7", sender: "ia", text: qs[2], time: t(9, 16), read: true },
+      { id: "gm8", sender: "prospect", text: as[2], time: t(9, 20), read: true },
+      { id: "gm9", sender: "ia", text: "Souhaitez-vous être rappelé(e) par un conseiller ?", time: t(9, 21), read: true, buttons: ["Oui", "Non"] },
+      { id: "gm10", sender: "prospect", text: closing, time: t(9, 25), read: true },
+    ],
+  };
+};
+
+for (const p of seedProspects) {
+  if (p.statut === "nouveau") continue;
+  const idx = seedConversations.findIndex((c) => c.prospectId === p.id);
+  if (idx >= 0 && hasQRPair(seedConversations[idx])) continue;
+  const existing = idx >= 0 ? seedConversations[idx] : undefined;
+  const filled = buildFallbackConv(p, existing?.id);
+  if (idx >= 0) seedConversations[idx] = filled;
+  else seedConversations.push(filled);
+}
