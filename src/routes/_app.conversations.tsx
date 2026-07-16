@@ -344,38 +344,37 @@ function ConversationsPage() {
       <Dialog open={assignOpen} onOpenChange={setAssignOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Transférer à un commercial</DialogTitle>
+            <DialogTitle>Assigner la conversation</DialogTitle>
           </DialogHeader>
           <div className="space-y-2">
-            {commerciaux
-              .filter((c) => c.actif)
-              .map((c) => (
+            {users
+              .filter((u) => u.actif)
+              .map((u) => (
                 <button
-                  key={c.id}
+                  key={u.id}
                   className="flex w-full items-center justify-between rounded-lg border p-3 text-left hover:bg-muted"
                   onClick={() => {
                     if (!active) return;
-                    update(active.id, { handledBy: "humain" });
+                    update(active.id, { handledBy: "humain", assignedUserId: u.id });
                     addMessage(active.id, {
                       sender: "system",
-                      text: `— Reprise par ${c.nom} (Commercial) —`,
+                      text: `— Reprise par ${u.nom} —`,
                     });
-                    if (activeProspect) {
-                      updateProspect(activeProspect.id, { commercialId: c.id });
-                    }
                     setAssignOpen(false);
-                    toast.success(`Transféré à ${c.nom}`);
+                    toast.success(`Assigné à ${u.nom}`);
                   }}
                 >
                   <div>
-                    <div className="font-medium">{c.nom}</div>
-                    <div className="text-xs text-muted-foreground">Taux : {c.closingRate}%</div>
+                    <div className="font-medium">{u.nom}</div>
+                    <div className="text-xs text-muted-foreground">{u.email}</div>
                   </div>
                 </button>
               ))}
           </div>
         </DialogContent>
       </Dialog>
+      {/* commerciaux kept for compatibility */}
+      {false && <span>{commerciaux.length}</span>}
     </div>
   );
 }
