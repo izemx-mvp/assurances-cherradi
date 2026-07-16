@@ -92,6 +92,8 @@ function ProspectsPage() {
   const commerciaux = useCommerciaux((s) => s.items);
   const conversations = useConversations((s) => s.items);
   const role = useAuth((s) => s.currentRole);
+  const overrides = useAuth((s) => s.overrides);
+
 
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -165,9 +167,10 @@ function ProspectsPage() {
     });
   }, [items, search, statusFilter, sourceFilter]);
 
-  const canCreate = can(role, "prospects", "create");
-  const canUpdate = can(role, "prospects", "update");
-  const canDelete = can(role, "prospects", "delete");
+  const canCreate = can(role, "prospects", "create", overrides);
+  const canUpdate = can(role, "prospects", "update", overrides);
+  const canDelete = can(role, "prospects", "delete", overrides);
+
 
   const openCreate = () => {
     setEditing(null);
