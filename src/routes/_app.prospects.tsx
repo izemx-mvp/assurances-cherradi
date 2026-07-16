@@ -503,7 +503,7 @@ function ProspectsPage() {
                 <SheetTitle>
                   {detail.prenom} {detail.nom}
                 </SheetTitle>
-                <SheetDescription>Fiche prospect et historique WhatsApp</SheetDescription>
+                <SheetDescription>Fiche prospect et qualification</SheetDescription>
               </SheetHeader>
               <div className="mt-4 space-y-4 px-4 pb-6">
                 <div className="grid grid-cols-2 gap-3 rounded-lg border bg-muted/30 p-3 text-sm">
@@ -538,26 +538,52 @@ function ProspectsPage() {
                     <div className="text-muted-foreground">{detail.notes}</div>
                   </div>
                 )}
-                <div>
-                  <div className="mb-2 text-sm font-medium">Historique WhatsApp</div>
-                  {detailConv ? (
-                    <div className="space-y-2 rounded-lg border p-3">
-                      {detailConv.messages.slice(-6).map((m) => (
-                        <div key={m.id} className="text-xs">
-                          <span className="font-medium">
-                            {m.sender === "ia" ? "IA" : m.sender === "prospect" ? "Prospect" : m.sender === "humain" ? "Conseiller" : "Système"}
-                            :
-                          </span>{" "}
-                          <span className="text-muted-foreground">{m.text}</span>
+                {detail.statut !== "nouveau" && (
+                  <div>
+                    <div className="mb-2 text-sm font-medium">
+                      Questions & réponses de qualification
+                    </div>
+                    {(() => {
+                      if (!detailConv) {
+                        return (
+                          <div className="rounded-lg border border-dashed p-4 text-center text-xs text-muted-foreground">
+                            Aucune qualification enregistrée
+                          </div>
+                        );
+                      }
+                      const pairs: { q: string; a: string }[] = [];
+                      const msgs = detailConv.messages;
+                      for (let i = 0; i < msgs.length; i++) {
+                        const m = msgs[i];
+                        if ((m.sender === "ia" || m.sender === "humain") && m.text.includes("?")) {
+                          const next = msgs.slice(i + 1).find((x) => x.sender === "prospect");
+                          if (next) pairs.push({ q: m.text, a: next.text });
+                        }
+                      }
+                      if (pairs.length === 0) {
+                        return (
+                          <div className="rounded-lg border border-dashed p-4 text-center text-xs text-muted-foreground">
+                            Aucune question/réponse détectée
+                          </div>
+                        );
+                      }
+                      return (
+                        <div className="space-y-3 rounded-lg border p-3">
+                          {pairs.map((p, idx) => (
+                            <div key={idx} className="space-y-1 border-l-2 border-primary/40 pl-3">
+                              <div className="text-xs font-medium text-foreground">
+                                Q · {p.q}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                R · {p.a}
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="rounded-lg border border-dashed p-4 text-center text-xs text-muted-foreground">
-                      Aucune conversation démarrée
-                    </div>
-                  )}
-                </div>
+                      );
+                    })()}
+                  </div>
+                )}
               </div>
             </>
           )}
