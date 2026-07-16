@@ -1,6 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
-  Headset,
   LayoutDashboard,
   MessageCircle,
   Send,
@@ -37,7 +36,6 @@ const items: Item[] = [
   { title: "Prospects", url: "/prospects", icon: Users, resource: "prospects" },
   { title: "Campagnes de relance", url: "/campaigns", icon: Send, resource: "campaigns" },
   { title: "Conversations", url: "/conversations", icon: MessageCircle, resource: "conversations" },
-  { title: "Commerciaux", url: "/commerciaux", icon: Headset, resource: "commerciaux" },
   { title: "Utilisateurs", url: "/users", icon: ShieldUser, resource: "users" },
 ];
 
