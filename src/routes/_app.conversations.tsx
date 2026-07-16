@@ -128,6 +128,20 @@ function ConversationsPage() {
                   <SelectItem value="humain">Reprises humaines</SelectItem>
                 </SelectContent>
               </Select>
+              <Select value={assigneeFilter} onValueChange={setAssigneeFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Assigné à" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tous les assignés</SelectItem>
+                  <SelectItem value="unassigned">Non assignées</SelectItem>
+                  {users.map((u) => (
+                    <SelectItem key={u.id} value={u.id}>
+                      {u.nom}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="flex-1 overflow-y-auto">
               {filteredThreads.map((c) => {
