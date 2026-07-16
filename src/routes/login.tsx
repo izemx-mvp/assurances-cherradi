@@ -34,11 +34,8 @@ function LoginPage() {
 
       <div className="w-full max-w-lg rounded-3xl border border-border/60 bg-card/80 p-10 shadow-elegant backdrop-blur-xl sm:p-12">
         <div className="mb-8 flex flex-col items-center text-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl gradient-primary shadow-glow ring-1 ring-white/10">
-            <Logo size={44} />
-          </div>
-          <h1 className="mt-5 font-display text-4xl sm:text-5xl">Nexa Assurances</h1>
-          <p className="mt-2 text-sm text-muted-foreground">Connectez-vous à votre espace</p>
+          <Logo size={96} />
+          <p className="mt-5 text-sm text-muted-foreground">Connectez-vous à votre espace</p>
         </div>
 
         <form onSubmit={submit} className="space-y-5">
