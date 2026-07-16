@@ -31,7 +31,21 @@ const matrix: Record<UserRole, Record<Resource, Action[]>> = {
   },
 };
 
-export function can(role: UserRole, resource: Resource, action: Action): boolean {
+export type PermissionOverrides = Partial<Record<Resource, Action[]>>;
+
+export function rolePermissions(role: UserRole): Record<Resource, Action[]> {
+  return matrix[role];
+}
+
+export function can(
+  role: UserRole,
+  resource: Resource,
+  action: Action,
+  overrides?: PermissionOverrides,
+): boolean {
+  if (overrides && overrides[resource]) {
+    return overrides[resource]!.includes(action);
+  }
   return matrix[role][resource].includes(action);
 }
 
@@ -41,3 +55,19 @@ export const roleLabels: Record<UserRole, string> = {
   commercial: "Commercial",
   viewer: "Lecteur",
 };
+
+export const resourceLabels: Record<Resource, string> = {
+  prospects: "Prospects",
+  campaigns: "Campagnes",
+  conversations: "Conversations",
+  commerciaux: "Commerciaux",
+  users: "Utilisateurs",
+};
+
+export const allActions: Action[] = ["create", "read", "update", "delete"];
+export const allResources: Resource[] = [
+  "prospects",
+  "campaigns",
+  "conversations",
+  "users",
+];
